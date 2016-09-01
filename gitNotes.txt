@@ -1,0 +1,1149 @@
+################################################################################
+github.ibm.com vs github.com
+============================
+The former is IBM's GHE site, the later is open source site.
+- github.ibm.com: Use davidson@us.ibm.com w/IBM intranet pwd to login, or ssh 
+  key for no passwd
+   - CDS-Config-Service: repo for frappe project
+   - ScottsRepo: private repo for testing
+- github.com: Username: ScottD53, Pwd: D***!, email: xscottmdavidson53@gmail.com
+   - Cloudant repos use this
+   - non-ibm/personal/test repos (i.e. Spoon-Knife demo)
+
+################################################################################
+github.ibm.com:
+==============
+- github.ibm.com: summary info of my repos, repos I've contributed to, and orgs 
+  I belong to
+- github.ibm.com/davidson: my home, see my repos and repos I've contributed to 
+  (CDS-Config-Service)
+- github.ibm.com/settings: or click on icon of me (upper right), to set Profile
+  properties and Settings such as SSH keys, etc
+
+################################################################################
+Organizations:
+==============
+- Member & manager of CDS-Config-Service org
+- From github.ibm.com click on dashboard context drop-down icon (upper left) 
+  and select Manage Organizations, select CDS-Config-Service organization, 
+  allows you to see repos under that org and manage members (People) and privs
+  (Teams).
+
+################################################################################
+CDS-Config-Service org repos:
+=============================
+- URL: https://github.ibm.com/CDS-Config-Service
+- product-source: repo for frappe
+- private-repo-for-private-stuff: SSL keys and other secure data
+
+################################################################################
+Create a new Repo:
+==================
+Click on "+v" icon in upper left
+
+################################################################################
+Fork a repository (example using github Spoon-Knife demo):
+==========================================================
+- In browser navigate to github.com and login
+- Navigate to the repo to be forked (github.com/octocat/Spoon-Knife)
+- In the top-right corner of the page, click Fork, select the org to put it under
+- This creates a remote repo that is associated with the original remote repo
+
+################################################################################
+Clone repo (create local repo from remote forked repo):
+============================================================
+$ git clone https://github.com/ScottD53/Spoon-Knife.git
+Cloning into 'Spoon-Knife'...
+remote: Counting objects: 16, done.
+remote: Total 16 (delta 0), reused 0 (delta 0), pack-reused 16
+Unpacking objects: 100% (16/16), done.
+Checking connectivity... done.
+
+$ cd Spoon-Knife/
+$ ls
+README.md	index.html	styles.css
+
+$ git remote -v
+origin	https://github.com/ScottD53/Spoon-Knife.git (fetch)
+origin	https://github.com/ScottD53/Spoon-Knife.git (push)
+
+- A remote named origin is created, pointing to the URL specified in the clone 
+  command, a branch named master is checked out
+
+################################################################################
+Clone a CDS repo using ssh key (doesn't require username/pwd prompt):
+=====================================================================
+$ git clone git@github.ibm.com:CloudDataServices/cds-graph-runbooks.git
+Cloning into 'cds-graph-runbooks'...
+remote: Counting objects: 288, done.
+remote: Compressing objects: 100% (12/12), done.
+remote: Total 288 (delta 4), reused 0 (delta 0), pack-reused 276
+Receiving objects: 100% (288/288), 85.68 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (150/150), done.
+Checking connectivity... done.
+
+################################################################################
+Associate fork/clone with the upstream master (to keep in sync):
+================================================================
+$ git remote add upstream https://github.com/octocat/Spoon-Knife.git
+$ git remote -v
+origin	https://github.com/ScottD53/Spoon-Knife.git (fetch)
+origin	https://github.com/ScottD53/Spoon-Knife.git (push)
+upstream	https://github.com/octocat/Spoon-Knife.git (fetch)
+upstream	https://github.com/octocat/Spoon-Knife.git (push)
+
+- In browser navigate to the repo (github.com/ScottD53/Sppon-Knife), notice the 
+  branch is master and that "This branch is even with octocat:master"
+
+################################################################################
+Remove a Remote repo from being associated with Local repo:
+===========================================================
+$ git remote -v
+origin	https://github.com/ScottD53/Spoon-Knife.git (fetch)
+origin	https://github.com/ScottD53/Spoon-Knife.git (push)
+upstream	https://github.com/octocat/Spoon-Knife.git (fetch)
+upstream	https://github.com/octocat/Spoon-Knife.git (push)
+
+$ git remote rm upstream
+$ git remote -v
+origin	https://github.com/ScottD53/Spoon-Knife.git (fetch)
+origin	https://github.com/ScottD53/Spoon-Knife.git (push)
+
+################################################################################
+Modify files in local repo, commit them to remote repo
+
+- See https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
+- Note that files can be in 2 general states:
+  1) Untracked - files that are new since the last "snapshot"
+  2) Tracked - either Unmodified, Modified, or Staged. Only Staged files can be
+     committed.
+- After forking & cloning a repo modify one or more files in the local repo. 
+
+- Check the status of files in local repo:
+
+  $ git status
+  On branch master
+  Your branch is up-to-date with 'origin/master'.
+  Changes not staged for commit:
+    (use "git add <file>..." to update what will be committed)
+    (use "git checkout -- <file>..." to discard changes in working directory)
+  
+  	modified:   index.html
+  
+  no changes added to commit (use "git add" and/or "git commit -a")
+
+- Need to add modified or untracked files to the staged state before commiting them
+
+  $ git add index.html
+  $ git status
+  On branch master
+  Your branch is up-to-date with 'origin/master'.
+  Changes to be committed:
+    (use "git reset HEAD <file>..." to unstage)
+  
+  	modified:   index.html
+  
+- Now commit it, this makes a snapshot of all staged files in your local repo,
+  will bring up a vim editor to add comment
+
+  $ git commit
+  [master 192f0c9] First commit, changes to index.html
+   1 file changed, 1 insertion(+)
+  $ git status
+  On branch master
+  Your branch is ahead of 'origin/master' by 1 commit.
+    (use "git push" to publish your local commits)
+  nothing to commit, working directory clean
+
+- Note, the SHA-1 checksum on the commit above is 192f0c9
+- Note, you can use "git commit -a" to do both the add and commit together
+  (doesn't work for untracked files).
+- Note, "git commit -v" will put the diffs of all files in the message 
+  file to make it handy to doc your changes
+
+################################################################################
+Here's an example of adding adding a new (untracked) file and re-modifying a 
+staged file
+
+  $ echo 'new stuff' > foo.txt
+  $ vi index.html
+  $ git status -s
+   M index.html
+  ?? foo.txt
+  $ git add .
+  $ git status -s
+  A  foo.txt
+  M  index.html
+
+- Commit 2nd batch of changes
+  $ git commit -m "Added foo.txt, modified index.html"
+  [master 7637243] Added foo.txt, modified index.html
+   2 files changed, 2 insertions(+)
+  create mode 100644 foo.txt
+  $ git status
+  On branch master
+  Your branch is ahead of 'origin/master' by 2 commits.
+    (use "git push" to publish your local commits)
+  nothing to commit, working directory clean
+
+- Can also use "git diff" and "git diff -staged" to see unstaged/staged 
+  changes similar to "git status" above
+
+- Use "git commit --amend" to change the message associated with a 
+  commit, can also use if you forgot to add a file to a commit (results
+  in single commit)
+
+- To delete a tracked file from local repo and remote branch use 
+
+$ git rm file
+
+- To delete a tracked file just from remote branch (keep it locally) use 
+
+$ git rm --cached file
+
+- Here's the remote repo we're working with
+
+$ git remote -v
+origin  https://github.com/ScottD53/Spoon-Knife.git (fetch)
+origin  https://github.com/ScottD53/Spoon-Knife.git (push)
+
+- First verify the changes between local and remote repos are as expect
+
+$ git diff origin master
+diff --git a/foo.txt b/foo.txt
+new file mode 100644
+index 0000000..7b33a4a
+--- /dev/null
++++ b/foo.txt
+@@ -0,0 +1 @@
++new stuff
+diff --git a/index.html b/index.html
+index a83618b..6b35643 100644
+--- a/index.html
++++ b/index.html
+@@ -14,6 +14,8 @@
+ <!-- Feel free to change this text here -->
+ <p>
+   Fork me? Fork you, @octocat!
++  Fork this! @ScottMD53
++  Enough of this nonsense!
+ </p>
+
+ </body>
+
+- Push committed changes in local repo to master branch of remote repo named 
+  origin  
+
+$ git push origin master
+Counting objects: 7, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (7/7), 791 bytes | 0 bytes/s, done.
+Total 7 (delta 2), reused 0 (delta 0)
+To https://github.com/ScottD53/Spoon-Knife.git
+   d0dd1f6..7637243  master -> master
+$ git diff origin master
+$
+
+################################################################################
+Note, "git difftool" will allow diffs to be viewed in other tools like vimdiff 
+      (see git difftool --tool-help)
+
+################################################################################
+- Show list of commits made to repo in reverse order
+
+$ git log
+commit 7637243ed9e56d16cfb1e5701ed69fe33c3cfbc8
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Fri Oct 30 17:01:05 2015 -0400
+
+    Added foo.txt, modified index.html
+
+commit 192f0c9b4d7aacdbb79c909afa53e71abf745c23
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Fri Oct 30 16:13:08 2015 -0400
+
+    First commit, changes to index.html
+...
+
+Note, See -p and -2 -S --since --stat --committer options on git log command
+
+################################################################################
+- "git fetch" will update the state of any remote branches in your clone of the
+  repository. It does not actually update the files locally.
+- "git merge" brings down changes from remote that exist locally and merges
+  withi your changes?
+- "git pull" does both merge and fetch
+
+################################################################################
+It’s important to note that when you switch branches in Git (i.e. git checkout 
+<branchname>), files in your working directory will change. If you switch to an
+older branch, your working directory will be reverted to look like it did the
+last time you committed on that branch. 
+
+$ git branch
+  WI11418
+  WI13165
+* master
+$ ls -l ResourceAdmin.java
+-rw-r--r--  1 scottdavidson  staff  9974 Nov 25 16:09 ResourceAdmin.java
+$ git checkout WI13165           #    ^            ^
+Switched to branch 'WI13165'     #    |            |
+$ ls -l ResourceAdmin.javai      #    V            V
+-rw-r--r--  1 scottdavidson  staff  8268 Nov 25 16:14 ResourceAdmin.java
+
+################################################################################
+Important! Do not pull origin/master to a local tracking branch. In order to 
+update a tracking branch with commits from others which have happened since 
+since creating it do the following:
+  1. git checkout master
+  2. git pull origin master
+  2a. git reset --hard      # Not sure why
+  3. git checkout WI11418
+  4. git rebase master
+  5. git push origin WI11418
+  
+################################################################################
+Here's how to resync local master branch with remote origin/master 
+(steps 1 & 2 above). 
+
+$ pwd
+/Users/scottdavidson/frappeGHE/product-source/frappe
+$ git checkout master
+Switched to branch 'master'
+Your branch is behind 'origin/master' by 84 commits, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+$ git branch
+* master
+  wi11418
+$ git pull
+Updating 52d7cb2..984eeae
+Fast-forward
+ frappe-parent/pom.xml                                                             |   39 +-
+... lots of other changes ....
+$ git log -1
+commit 984eeae92fa8f15eb912c4fd6cfa99a0b2d0c9b0
+Author: CHRISTOPHER J. QUINONES <cjquinon@us.ibm.com>
+Date:   Mon Nov 2 18:50:13 2015 -0500
+
+    Fix timestamp format to use MM for month instead of mm
+
+    IDS: WI11659 git diff origin master
+$ git diff origin master
+$ git reset --hard      # Not sure why I did this!
+HEAD is now at 984eeae Fix timestamp format to use MM for month instead of mm
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working directory clean
+
+################################################################################
+Here's an example of rebasing a local tracking branch that has no commits 
+(steps 3-4 above)
+
+$ git checkout WI11418
+Switched to branch 'WI11418'
+$ git rebase master
+First, rewinding head to replay your work on top of it...
+Fast-forwarded WI11418 to master.
+$ git log -1
+commit 984eeae92fa8f15eb912c4fd6cfa99a0b2d0c9b0
+Author: CHRISTOPHER J. QUINONES <cjquinon@us.ibm.com>
+Date:   Mon Nov 2 18:50:13 2015 -0500
+
+    Fix timestamp format to use MM for month instead of mm
+
+    IDS: WI11659
+$ git diff origin master
+$
+
+################################################################################
+Similar to above but in this case the local tracking branch has commits.
+Assumes local master has been refreshed with a git pull origin master 
+(steps 1-2 above)
+
+$ git checkout WI11418
+Switched to branch 'WI11418'
+$ git rebase master
+First, rewinding head to replay your work on top of it...
+Applying: Created frappe_collectors and frappe_metrics files, the frappe custom metrics conf & script files
+$
+
+################################################################################
+Here is the typical sequence for submitting code for the Config Store team 
+(even though it was done against Spoon-Knife demo). The -b option to 
+"git checkout" causes a branch to be created if it doesn't already exist and 
+then switched to (for Frappe use WI##### for name of branch)
+
+$ git checkout -b testbranch  
+Switched to a new branch 'testbranch'
+$ vi foo.txt
+$ git status
+On branch testbranch
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   foo.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$ git add .
+$ git commit
+[testbranch bc6e58c] 3rd change
+ 1 file changed, 1 insertion(+)
+$ git status
+On branch testbranch
+nothing to commit, working directory clean
+$ git branch
+  master
+* testbranch
+$ git diff origin testbranch
+# diffs between the local testbranch and the remote origin testbranch are shown here
+# ....
+
+$ git push origin testbranch
+Counting objects: 3, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 274 bytes | 0 bytes/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+To https://github.com/ScottD53/Spoon-Knife.git
+ * [new branch]      testbranch -> testbranch
+
+- Now go to github.com (or github.ibm.com), click on "branches" tab, click 
+  on remote branch just created (via push).
+- A page will be displayed that shows info on your remote tracking branch. 
+   -Click on Compare to see diffs. 
+   -Click on "Pull request" when you're ready for someone to code review your
+    commits in the branch.  A list of diffs is shown.
+   -After they have okayed the changes press the merge button in the branch 
+    url. This will merge the changes in your branch into the master branch.
+
+- After your changes have been merged into the remote master you should delete
+  your tracking branch.  This can be done either in the github UI,
+- Or using the following command line:
+
+$ git remote show origin |grep WI13165
+    WI13165                                                                     tracked
+    WI13165 pushes to WI13165 (up to date)
+$ git push origin --delete WI13165
+To git@github.ibm.com:CDS-Config-Service/product-source.git
+ - [deleted]         WI13165
+$ git remote show origin |grep WI13165
+$
+
+################################################################################
+The -vv option for "git branch" shows more detail (remote repo/branch the local 
+branches are associated with and last commit msg)
+
+$ git branch
+* WI11418
+  master
+$ git branch -vv
+* WI11418 984eeae Fix timestamp format to use MM for month instead of mm
+  master  984eeae [origin/master] Fix timestamp format to use MM for month instead of mm
+
+################################################################################
+In order to roll-back a commit you mistakenly made to a remote tracking branch 
+do the following
+
+$ git branch
+* WI11418
+  master
+$ git log -1
+commit 5143820826f6e96257847d09026e071ee9989256
+Merge: 0e6553b 49607a1
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Fri Nov 6 15:30:53 2015 -0500
+
+    Merge branch 'master' of github.ibm.com:CDS-Config-Service/product-source into WI11418
+    21 commits since branching from master, Able to merge but lets make sure
+$ git reset --hard 0e6553baa1b0185da205b9ec32e5064d90ab1a4a
+HEAD is now at 0e6553b Created frappe_collectors and frappe_metrics files, the frappe custom metrics conf & script files
+$ git push -f origin WI11418
+Total 0 (delta 0), reused 0 (delta 0)
+To git@github.ibm.com:CDS-Config-Service/product-source.git
+ + 5143820...0e6553b WI11418 -> WI11418 (forced update)
+$ git log -1
+commit 0e6553baa1b0185da205b9ec32e5064d90ab1a4a
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Fri Nov 6 14:55:24 2015 -0500
+
+    Created frappe_collectors and frappe_metrics files, the frappe custom metrics conf & script files
+
+################################################################################
+Here's how you can see more about your remote's
+
+$ git remote show origin
+* remote origin
+  Fetch URL: git@github.ibm.com:CDS-Config-Service/product-source.git
+  Push  URL: git@github.ibm.com:CDS-Config-Service/product-source.git
+  HEAD branch: master
+  Remote branches:
+    WI10730-Add-CAS-Delete-REST                                          new (next fetch will store in remotes/origin)
+    WI10731-create-if-null                                               tracked
+    WI11418                                                              tracked
+    ...
+  Local branch configured for 'git pull':
+    master merges with remote master
+  Local refs configured for 'git push':
+    WI11418 pushes to WI11418 (up to date)
+    master  pushes to master  (local out of date)
+
+################################################################################
+Concise log format! Notice it can be used to show which commits are on the 
+tracking branch compared to the master branch
+
+$ git checkout WI11418
+Already on 'WI11418'
+$ git log --oneline --decorate -3
+0e6553b (HEAD, origin/WI11418, WI11418) Created frappe_collectors and frappe_metrics files
+984eeae (origin/WI11659, master) Fix timestamp format to use MM for month instead of mm
+98fdf01 Add a function to return a UTC timestamp in groovy utils
+$ git checkout master
+Switched to branch 'master'
+Your branch is behind 'origin/master' by 5 commits, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+$ git log --oneline --decorate -15
+984eeae (HEAD, origin/WI11659, master) Fix timestamp format to use MM for month instead of mm
+98fdf01 Add a function to return a UTC timestamp in groovy utils
+7ced988 Merge pull request #27 from CDS-Config-Service/WI10731-create-if-null
+
+################################################################################
+Try the --graph option
+
+
+################################################################################
+If you start out making changes on local master branch and do a commit, but then
+want to associate that commit with a tracking branch and revert the commit from 
+local master.
+
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   frappe/src/main/java/com/ibm/ws/frappe/asaservice/resources/ResourceAdmin.java
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+$ git commit frappe/src/main/java/com/ibm/ws/frappe/asaservice/resources/ResourceAdmin.java
+[master 8efbe0f] Remove deprecated admin/replica/view/cluster and admin/replica/view/self APIs
+ 1 file changed, 56 deletions(-)
+
+$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+nothing to commit, working directory clean
+
+$ git checkout -b WI13165
+Switched to a new branch 'WI13165'
+
+$ git branch
+  WI11418
+* WI13165
+  master
+
+$ git checkout master
+Switched to branch 'master'
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+$ git reset --hard HEAD~1
+HEAD is now at 9bf5593 Merge remote-tracking branch 'refs/remotes/origin/master'
+
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working directory clean
+
+$ git log -1
+commit 9bf5593b00fd92a823bd005c0e3943752b2e99a6
+Merge: b51ad7c a418139
+Author: dpitera <dpitera@us.ibm.com>
+Date:   Thu Nov 19 10:05:53 2015 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master'
+
+$ git checkout WI13165
+Switched to branch 'WI13165'
+
+$ git log -2
+commit 8efbe0fadee270f07c1951c4182fa9cce9ee86a9
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Mon Nov 23 16:23:05 2015 -0500
+
+    Remove deprecated admin/replica/view/cluster and admin/replica/view/self APIs
+
+commit 9bf5593b00fd92a823bd005c0e3943752b2e99a6
+Merge: b51ad7c a418139
+Author: dpitera <dpitera@us.ibm.com>
+Date:   Thu Nov 19 10:05:53 2015 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master'
+
+$ git diff origin WI13165
+diff --git a/frappe/src/main/java/com/ibm/ws/frappe/asaservice/resources/ResourceAdmin.java b/frappe/src/main/java/com/ibm/ws/frappe/asaservice/resources/ResourceAdmin.java
+index 37386d7..b3f668d 100644
+--- a/frappe/src/main/java/com/ibm/ws/frappe/asaservice/resources/ResourceAdmin.java
++++ b/frappe/src/main/java/com/ibm/ws/frappe/asaservice/resources/ResourceAdmin.java
+
+... diff is shown here .... 
+
+$ git push origin WI13165
+Counting objects: 13, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (9/9), done.
+Writing objects: 100% (13/13), 954 bytes | 0 bytes/s, done.
+Total 13 (delta 6), reused 0 (delta 0)
+To git@github.ibm.com:CDS-Config-Service/product-source.git
+ * [new branch]      WI13165 -> WI13165
+
+$ git diff WI13165 origin/WI13165
+$
+
+################################################################################
+To list files associated with a commit 
+ 1) with diffs, 
+ 2) summary info & file names only, 
+ 3) file names only
+
+$ git log -1
+commit 01ead0aefb8c63eca3e3aa39ae0a456b834980c6
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Thu Dec 10 14:51:05 2015 -0500
+
+    Add details on how to install pre-reqs in README.md
+
+##### 1)
+
+$ git show 01ead0
+commit 01ead0aefb8c63eca3e3aa39ae0a456b834980c6
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Thu Dec 10 14:51:05 2015 -0500
+
+    Add details on how to install pre-reqs in README.md
+
+diff --git a/README.md b/README.md
+index 515bdc9..613b255 100644
+--- a/README.md
++++ b/README.md
+@@ -12,10 +12,10 @@ Please tag appropriately as "Bug" or "Enhancement".
+ [Developer guide](https://releaseblueprints.ibm.com/display/CDS/Developer+Guide)
+
+ ## Pre-requsisites
+-- Node
+-- npm
+-- grunt
+-- sass
++- Node (Currently running this version -> https://nodejs.org/download/release/v0.12.7/)
++- npm (make sure it is up-to-date -> `sudo npm install npm -g`)
++- grunt (`sudo npm install -g grunt-cli`)
++- sass (`sudo gem install saas`)
+   - ruby (needed by sass)
+
+ Run "npm install" in the root directory of the project upon loading.
+
+##### 2)
+
+$ git show --name-only 01ead0
+commit 01ead0aefb8c63eca3e3aa39ae0a456b834980c6
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Thu Dec 10 14:51:05 2015 -0500
+
+    Add details on how to install pre-reqs in README.md
+
+README.md
+
+##### 3)
+$ git show --pretty="format:" --name-only 01ead0
+README.md
+
+################################################################################
+Tags (see https://git-scm.com/book/en/v2/Git-Basics-Tagging):
+==============================================================
+
+$ git tag
+v0.6.0
+v0.6.1
+v0.6.2
+v0.6.3
+v0.6.4
+v0.8.0
+v0.8.1
+v0.9.0
+v0.9.1
+
+$ git show v0.9.1
+tag v0.9.1
+Tagger: John Nason <jnason@us.ibm.com>
+Date:   Fri Mar 4 10:03:26 2016 -0500
+
+Pre source tree refactor
+
+commit ce0891b58a76a6e4f3ac13d629d985d304cc51e3
+Merge: 92fe0a1 8ae1204
+Author: John Nason <jnason@us.ibm.com>
+Date:   Thu Mar 3 16:51:16 2016 -0500
+
+    Merge pull request #1029 from CloudDataServices/GHE1023
+
+    Remove "New" and "Cancelled" from Client Satisfaction calc
+
+$ git checkout tags/v0.9.1
+Note: checking out 'tags/v0.9.1'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at ce0891b... Merge pull request #1029 from CloudDataServices/GHE1023
+
+$ git log -1
+commit ce0891b58a76a6e4f3ac13d629d985d304cc51e3
+Merge: 92fe0a1 8ae1204
+Author: John Nason <jnason@us.ibm.com>
+Date:   Thu Mar 3 16:51:16 2016 -0500
+
+    Merge pull request #1029 from CloudDataServices/GHE1023
+
+    Remove "New" and "Cancelled" from Client Satisfaction calc
+
+
+$ git checkout master
+Previous HEAD position was ce0891b... Merge pull request #1029 from CloudDataServices/GHE1023
+Switched to branch 'master'
+Your branch is up-to-date with 'origin/master'.
+
+$ git show
+commit 219e973405d3155f234ff99efc33980be5286652
+Merge: c5ce258 c82da3f
+Author: Christopher J. Quinones <cjquinon@us.ibm.com>
+Date:   Wed Mar 9 12:40:49 2016 -0500
+
+    Merge pull request #1047 from CloudDataServices/GHE1023
+
+    GHE1023
+
+$ git branch
+  GHE574
+* master
+
+$ git checkout -b PreRefactor v0.9.1
+Switched to a new branch 'PreRefactor'
+
+$ git branch
+  GHE574
+* PreRefactor
+  master
+
+$ git show
+commit ce0891b58a76a6e4f3ac13d629d985d304cc51e3
+Merge: 92fe0a1 8ae1204
+Author: John Nason <jnason@us.ibm.com>
+Date:   Thu Mar 3 16:51:16 2016 -0500
+
+    Merge pull request #1029 from CloudDataServices/GHE1023
+
+    Remove "New" and "Cancelled" from Client Satisfaction calc
+
+  
+################################################################################
+A clone of the repository will update its state of any remote branches only by 
+doing git fetch. For example, if the remote branch is several commits ahead of
+the local branch git log and diff will not reflect this.
+
+$ git log -1
+commit c7eb6790465923a58d01d78a3116eef08d2d9ec1
+Merge: fe6e61e b6f5acf
+Author: Matthew T. Pelland <mtpelland@us.ibm.com>
+Date:   Fri Mar 4 14:11:07 2016 -0500
+
+    Merge pull request #195 from CloudDataServices/GHE193
+
+        Ghe193
+
+$ git log origin/master -1
+commit c7eb6790465923a58d01d78a3116eef08d2d9ec1
+Merge: fe6e61e b6f5acf
+Author: Matthew T. Pelland <mtpelland@us.ibm.com>
+Date:   Fri Mar 4 14:11:07 2016 -0500
+
+    Merge pull request #195 from CloudDataServices/GHE193
+
+        Ghe193
+
+$ git diff master origin/master
+$
+
+#####
+You can't connect directly to the server to check the log there. Instead,
+download the state of the server with git fetch and then locally see the
+log of the remote branches. Note that fetch doesn't touch the files in your
+local sandbox.
+
+$ git fetch
+remote: Counting objects: 367, done.
+remote: Compressing objects: 100% (74/74), done.
+remote: Total 367 (delta 77), reused 38 (delta 38), pack-reused 249
+Receiving objects: 100% (367/367), 91.01 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (232/232), completed with 22 local objects.
+From github.ibm.com:mtpelland/metrics-data-pipeline
+   c7eb679..52794b9  master     -> origin/master
+    * [new branch]      GHE138     -> origin/GHE138
+     * [new branch]      GHE153     -> origin/GHE153
+      * [new branch]      GHE155     -> origin/GHE155
+       * [new branch]      GHE162     -> origin/GHE162
+        * [new branch]      GHE230     -> origin/GHE230
+         * [new branch]      GHE247     -> origin/GHE247
+          * [new branch]      GHE254     -> origin/GHE254
+           * [new branch]      GHE93      -> origin/GHE93
+            * [new branch]      MD-787     -> origin/MD-787
+             * [new tag]         v0.9.0     -> v0.9.0
+
+$ git log -1 HEAD..origin/master    (HEAD.. isn't necessary, but more precise)
+commit 52794b971ba045af39b09bd7cb0a1ff73dc1c8b7
+Merge: 2cd3c5b c26cd05
+Author: John Nason <jnason@us.ibm.com>
+Date:   Fri Mar 25 08:50:11 2016 -0400
+
+    Merge pull request #253 from CloudDataServices/GHE249
+
+        Adjust Dev Advocacy Unique App Deployments
+$ git log -1
+commit c7eb6790465923a58d01d78a3116eef08d2d9ec1
+Merge: fe6e61e b6f5acf
+Author: Matthew T. Pelland <mtpelland@us.ibm.com>
+Date:   Fri Mar 4 14:11:07 2016 -0500
+
+    Merge pull request #195 from CloudDataServices/GHE193
+
+        Ghe193
+$ git diff master origin/master
+diff --git a/README.md b/README.md
+index cf8023b..abf1d6d 100644
+--- a/README.md
++++ b/README.md
+...
+
+$ ls -l README.md
+ -rw-r--r--  1 scottdavidson  staff  7260 Mar  7 09:48 README.md
+
+##### merge will update your local sandbox with what you just fetched
+
+$ git merge origin/master
+Updating c7eb679..52794b9
+Fast-forward
+
+ README.md                                                      |  74 +++-
+ ...
+ 24 changed, 1602 insertions(+), 1365 deletions(-)
+$ ls -l README.md
+-rw-r--r--  1 scottdavidson  staff  9277 Mar 29 08:46 README.md
+
+$ git diff master origin/master
+$
+
+################################################################################
+# Here's an example that illustrates Modified vs Staged vs Unmodified (committed).
+# An initial set of changes to provisioning_pipeline.py were made and staged
+# (git add), then subsequent changes were made as shown here:
+
+$ git status
+On branch GHE347
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	modified:   provisioning_pipeline_metrics.py
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   provisioning_pipeline_metrics.py
+
+##### diff what's in Staged (1st change w/git add)
+      (diff with what exactly, HEAD?)
+
+$ git diff --staged provisioning_pipeline_metrics.py
+diff --git a/airflow_home/dags/provisioning_pipeline_metrics.py b/airflow_home/dags/provisioning_pipeline_metrics.py
+index 4bc5cfd..e91ee5a 100644
+--- a/airflow_home/dags/provisioning_pipeline_metrics.py
++++ b/airflow_home/dags/provisioning_pipeline_metrics.py
+@@ -76,7 +76,10 @@ def pick_contextualizer(pick_def, context):
+     """ Set query context to date range of execution_date to 90 days prior."""
+     execution_date = context['execution_date']
+     begin_range = execution_date - timedelta(days=90)
+-    return pick_def % (begin_range.date().isoformat(), execution_date.date().isoformat())
++    return pick_def % (execution_date.date().isoformat(),
++                       begin_range.date().isoformat(),
++                       execution_date.date().isoformat(),
++                       execution_date.date().isoformat())
+...
+
+##### diff what's in Modified state (2nd change yet to be added)
+
+$ git diff provisioning_pipeline_metrics.py
+diff --git a/airflow_home/dags/provisioning_pipeline_metrics.py b/airflow_home/dags/provisioning_pipeline_metrics.py
+index e91ee5a..f9f5b5d 100644
+--- a/airflow_home/dags/provisioning_pipeline_metrics.py
++++ b/airflow_home/dags/provisioning_pipeline_metrics.py
+@@ -77,8 +77,7 @@ def pick_contextualizer(pick_def, context):
+     execution_date = context['execution_date']
+     begin_range = execution_date - timedelta(days=90)
+     return pick_def % (execution_date.date().isoformat(),
+-                       begin_range.date().isoformat(),
+-                       execution_date.date().isoformat(),
++                       begin_range.date().isoformat(),
+                        execution_date.date().isoformat())
+
+##### Add the 2nd change to Staged
+
+$ git add provisioning_pipeline_metrics.py
+
+$ git status
+On branch GHE347
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	modified:   dags/provisioning_pipeline_metrics.py
+$ git diff
+
+$ git diff --staged
+diff --git a/airflow_home/dags/provisioning_pipeline_metrics.py b/airflow_home/dags/provisioning_pipeline_metrics.py
+index 4bc5cfd..f9f5b5d 100644
+--- a/airflow_home/dags/provisioning_pipeline_metrics.py
++++ b/airflow_home/dags/provisioning_pipeline_metrics.py
+@@ -76,7 +76,9 @@ def pick_contextualizer(pick_def, context):
+     """ Set query context to date range of execution_date to 90 days prior."""
+     execution_date = context['execution_date']
+     begin_range = execution_date - timedelta(days=90)
+-    return pick_def % (begin_range.date().isoformat(), execution_date.date().isoformat())
++    return pick_def % (execution_date.date().isoformat(),
++                       begin_range.date().isoformat(),
++                       execution_date.date().isoformat())
+
+##### Commit the changes and diff
+
+$ git commit provisioning_pipeline_metrics.py -m "Experimental changes to include un-provisioned orders when computing average number of days to provision"
+[GHE347 c0d2943] Experimental changes to include un-provisioned orders when computing average number of days to provision
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+$ git log -2 provisioning_pipeline_metrics.py
+commit c0d294357b051aaa30f0fda1a5a7738673026bd0
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Wed May 25 11:14:58 2016 -0400
+
+    Experimental changes to include un-provisioned orders when computing average number of days to provision
+
+commit dcb25d9d0e23c03a5ac66eb4af22da8e4618d870
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Mon May 16 11:32:35 2016 -0400
+
+    Remove aggregated metrics since they are not needed, change from 30 to 90 day average, count all line items not DISTINCT orders, return count of all order line items
+
+$ git diff
+
+$ git diff origin GHE347
+diff --git a/airflow_home/dags/provisioning_pipeline_metrics.py b/airflow_home/dags/provisioning_pipeline_metrics.py
+index 4bc5cfd..f9f5b5d 100644
+--- a/airflow_home/dags/provisioning_pipeline_metrics.py
++++ b/airflow_home/dags/provisioning_pipeline_metrics.py
+@@ -76,7 +76,9 @@ def pick_contextualizer(pick_def, context):
+     """ Set query context to date range of execution_date to 90 days prior."""
+     execution_date = context['execution_date']
+     begin_range = execution_date - timedelta(days=90)
+-    return pick_def % (begin_range.date().isoformat(), execution_date.date().isoformat())
++    return pick_def % (execution_date.date().isoformat(),
++                       begin_range.date().isoformat(),
++                       execution_date.date().isoformat())
+
+##### Push the changes to a remote tracking branch, note the important difference between the following 2 diffs
+
+$ git push origin GHE347
+Counting objects: 5, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 742 bytes | 0 bytes/s, done.
+Total 5 (delta 4), reused 0 (delta 0)
+remote: This repository moved. Please use the new location:
+remote:   https://github.ibm.com/CloudDataServices/metrics-data-pipeline.git
+To git@github.ibm.com:mtpelland/metrics-data-pipeline.git
+ * [new branch]      GHE347 -> GHE347
+
+
+$ git diff origin/GHE347
+
+$ git diff origin GHE347
+diff --git a/airflow_home/dags/provisioning_pipeline_metrics.py b/airflow_home/dags/provisioning_pipeline_metrics.py
+index 4bc5cfd..f9f5b5d 100644
+--- a/airflow_home/dags/provisioning_pipeline_metrics.py
++++ b/airflow_home/dags/provisioning_pipeline_metrics.py
+@@ -76,7 +76,9 @@ def pick_contextualizer(pick_def, context):
+     """ Set query context to date range of execution_date to 90 days prior."""
+     execution_date = context['execution_date']
+     begin_range = execution_date - timedelta(days=90)
+-    return pick_def % (begin_range.date().isoformat(), execution_date.date().isoformat())
++    return pick_def % (execution_date.date().isoformat(),
++                       begin_range.date().isoformat(),
++                       execution_date.date().isoformat())
+
+################################################################################
+# Squashing commits 
+# (see https://ariejan.net/2011/07/05/git-squash-your-latests-commits-into-one/
+#      https://help.github.com/articles/changing-a-commit-message/)
+
+# We have 3 separate commits we'd like to squash into one
+
+$ git log -3
+
+commit 03ecb2d067c19f672412abcfcc2d6a34a1d063b2
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Tue Aug 23 17:04:48 2016 -0400
+
+    Add Change THREE.
+
+commit 7b6a30090ccdb5e36ffff5c40b71cbf33ad67027
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Tue Aug 23 17:02:09 2016 -0400
+
+    Remove Change TWO.
+
+commit c4d17ddc4eaec8b555ee6acca15e0934cd39a683
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Tue Aug 23 16:57:50 2016 -0400
+
+    Add Change ONE and Change TWO.
+
+$ git rebase -i HEAD~3
+
+# The rebase command above is used to squash (or reword, etc) previous commits.
+# The following comes up in your default editor:
+
+  1 pick c4d17dd Add Change ONE and Change TWO.
+  2 pick 7b6a300 Remove Change TWO.
+  3 pick 03ecb2d Add Change THREE.
+  4
+  5 # Rebase 48e6eeb..03ecb2d onto 48e6eeb (3 command(s))
+  6 #
+  7 # Commands:
+  8 # p, pick = use commit
+  9 # r, reword = use commit, but edit the commit message
+ 10 # e, edit = use commit, but stop for amending
+ 11 # s, squash = use commit, but meld into previous commit
+ 12 # f, fixup = like "squash", but discard this commit's log message
+ 13 # x, exec = run command (the rest of the line) using shell
+ 14 # d, drop = remove commit
+ 15 #
+ 16 # These lines can be re-ordered; they are executed from top to bottom.
+ 17 #
+ 18 # If you remove a line here THAT COMMIT WILL BE LOST.
+ 19 #
+ 20 # However, if you remove everything, the rebase will be aborted.
+ 21 #
+ 22 # Note that empty commits are commented out
+
+# Edit the above to look like this (note there must be a "pick" before the first "squash"):
+
+  1 pick c4d17dd Add Change ONE and Change TWO.
+  2 squash 7b6a300 Remove Change TWO.
+  3 squash 03ecb2d Add Change THREE.
+
+# After write-quit from above the following is shown in the editor:
+
+  1 # This is a combination of 3 commits.
+  2 # The first commit's message is:
+  3 Add Change ONE and Change TWO.
+  4
+  5 # This is the 2nd commit message:
+  6
+  7 Remove Change TWO.
+  8
+  9 # This is the 3rd commit message:
+ 10
+ 11 Add Change THREE.
+ 12
+ 13 # Please enter the commit message for your changes. Lines starting
+ 14 # with '#' will be ignored, and an empty message aborts the commit.
+ 15 #
+ 16 # Date:      Tue Aug 23 16:57:50 2016 -0400
+ 17 #
+ 18 # interactive rebase in progress; onto 48e6eeb
+ 19 # Last commands done (3 commands done):
+ 20 #    squash 7b6a300 Remove Change TWO.
+ 21 #    squash 03ecb2d Add Change THREE.
+ 22 # No commands remaining.
+ 23 # You are currently editing a commit while rebasing branch 'testsquash' on '48e6eeb'.
+ 24 #
+ 25 # Changes to be committed:
+ 26 #       modified:   airflow_home/dags/dag_utils.py
+
+# Edited the above to look like this:
+
+  1 # This is a combination of 3 commits.
+  2 # The first commit's message is:
+  3 Add Change ONE and THREE
+  4
+  5 # Please enter the commit message for your changes. Lines starting
+  ...
+
+# After that all three commits are squashed into one:
+
+[detached HEAD 121ddc2] Add Change ONE and THREE
+ Date: Tue Aug 23 16:57:50 2016 -0400
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+Successfully rebased and updated refs/heads/testsquash.
+
+$ git log -3
+commit 121ddc2831718d74718ae25c21b1e8386011339b
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Tue Aug 23 16:57:50 2016 -0400
+
+    Add Change ONE and THREE
+
+commit 48e6eebcf5b0ce9263e633a386c6ce5b89b27071
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Fri Aug 12 13:40:47 2016 -0400
+
+    Change cloudant-metrics DAG so it sets timestamp to last day of current
+    month w/out time part
+
+    fixes #442
+...
+
+# Note the commit hash is different. 
+# The resulting commit has the net result of of all 3 commits:
+
+$ git show 121ddc283
+commit 121ddc2831718d74718ae25c21b1e8386011339b
+Author: Scott Davidson <davidson@us.ibm.com>
+Date:   Tue Aug 23 16:57:50 2016 -0400
+
+    Add Change ONE and THREE
+
+diff --git a/airflow_home/dags/dag_utils.py b/airflow_home/dags/dag_utils.py
+index e921ef5..9380e36 100644
+--- a/airflow_home/dags/dag_utils.py
++++ b/airflow_home/dags/dag_utils.py
+@@ -1,10 +1,10 @@
+ """ Contains a collection of DAG utilities. """
++# Change ONE
+ from __future__ import absolute_import
+-
++# Change THREE
+ from datetime import datetime
+ from copy import deepcopy
+ import logging
+-
+ from airflow.exceptions import AirflowException
+
+ def add_dates(metric_info,
+
